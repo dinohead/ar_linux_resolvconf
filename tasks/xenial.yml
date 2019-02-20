@@ -1,0 +1,19 @@
+---
+
+- name: TEMPLATE | Template out the required files
+  become: true
+  become_user: root
+  template:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+    owner: "root"
+    group: "root"
+    mode: "{{ item.mode }}"
+  with_items:
+    - src: j2.nodnsupdate
+      mode: 'u=rw,g=r,o=r'
+      dest: '/etc/dhcp/dhclient-enter-hooks.d/nodnsupdate'
+
+    - src: j2.resolv.conf
+      mode: 'u=rwx,g=rx,o=rx'
+      dest: /etc/resolv.conf

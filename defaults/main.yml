@@ -1,0 +1,16 @@
+---
+
+linux_resolvconf_nameservers:
+- '10.10.0.2'
+- '10.10.0.3'
+- '10.10.0.4'
+
+linux_resolvconf_search:
+- 'domain.com'
+- 'test.domain.com'
+
+linux_resolvconf_options:
+- 'ndots:2'
+- 'attempts:1'
+- 'timeout:1'
+- 'rotate'
