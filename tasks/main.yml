@@ -1,0 +1,13 @@
+---
+
+- name: including tasks for current platform -> {{ ansible_os_family }}
+  include: "RedHat.yml"
+  when: ansible_os_family == 'RedHat'
+
+- name: including tasks for current platform -> {{ ansible_distribution_release }}
+  include: "xenial.yml"
+  when: ansible_distribution_release == 'xenial'
+
+- name: including tasks for current platform -> {{ ansible_distribution_release }}
+  include: "bionic.yml"
+  when: ansible_distribution_release == 'bionic'

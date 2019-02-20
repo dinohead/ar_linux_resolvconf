@@ -1,0 +1,59 @@
+---
+
+- name: YUM | Check if NetworkManager is installed
+  command: rpm -qa NetworkManager
+  register: task_result_0
+  changed_when: false
+  args:
+    warn: false
+
+- name: TEMPLATE | Stop NetworkManager from editing /etc/resolv.conf
+  become: true
+  become_user: root
+  template:
+    src: j2.no-dns.conf
+    dest: /etc/NetworkManager/conf.d/no-dns.conf
+    owner: "root"
+    group: "root"
+    mode: 'u=rw,g=r,o=r'
+  when: task_result_0.stdout
+  register: task_result_1
+
+- name: STAT | Check which NICs have config files
+  stat:
+    path: "{{ '/etc/sysconfig/network-scripts/ifcfg-' + item }}"
+  with_items: "{{ ansible_interfaces }}"
+  register: task_result_2
+
+- name: LINEINFILE | Prevent dhclient from editing /etc/resolv.conf
+  become: true
+  become_user: root
+  lineinfile:
+    path: "{{ item.stat.path }}"
+    regexp: 'PEERDNS'
+    line: 'PEERDNS=no'
+    state: present
+  when: item.item != 'lo' and item.stat.exists
+  with_items: "{{ task_result_2.results }}"
+  register: task_result_3
+
+- name: SERVICE | Restart services
+  become: true
+  become_user: root
+  systemd:
+    name: NetworkManager
+    state: restarted
+    enabled: true
+  when: ( task_result_1.changed or task_result_3.changed ) and task_result_0.stdout
+  tags:
+    - skip_ansible_lint
+
+- name: TEMPLATE | Template out the required files
+  become: true
+  become_user: root
+  template:
+    src: 'j2.resolv.conf'
+    dest: '/etc/resolv.conf'
+    owner: "root"
+    group: "root"
+    mode: "u=rw,g=r,o=r"
