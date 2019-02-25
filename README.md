@@ -23,9 +23,9 @@ The variables in this role inclue:
 
 |parameter|required|default|choices|comments|
 |---|---|---|---|---|
-|linx_resolvconf_nameservers|false|['10.10.0.2','10.10.0.3','10.10.0.3']| |A list of strings. Each item will be added as a <code>nameserver</code> to <code>/etc/resolv.conf</code>.|
-|linux_resolvconf_search|false|['domian.com', 'test.domain.com']| |A list of strings. Each item will be added to <code>search</code> in <code>/etc/resolv.conf</code>.|
-|linux_resolvconf_options|false|['ndots:2', 'attempts:1', 'timeout:1', 'rotate']| |A list of strings. Each item will be added as a <code>option</code> to <code>/etc/resolv.conf</code>.|
+|linx_resolvconf_nameservers|false|['10.10.0.2','10.10.0.3','10.10.0.3']| |A list of strings. Each item will be added as a <code>nameserver</code> to <code>/etc/resolv.conf</code>. Variable can be set to `false` if no nameservers should be added to /etc/resolv.conf|
+|linux_resolvconf_search|false|['domian.com', 'test.domain.com']| |A list of strings. Each item will be added to <code>search</code> in <code>/etc/resolv.conf</code>. Variable can be set to `false` if no search domains should be added to /etc/resolv.conf|
+|linux_resolvconf_options|false|['ndots:2', 'attempts:1', 'timeout:1', 'rotate']| |A list of strings. Each item will be added as a <code>option</code> to <code>/etc/resolv.conf</code>. Variable can be set to `false` if no options should be added to /etc/resolv.conf|
 ## Dependencies
 
 
